@@ -1,5 +1,6 @@
 Howto Luks Debian and Gandi
 ==========================================
+
 This Howto describe a process to create a raw vm of Debian with an encrypted root partition on Gandi servers.
 Step 1, 2 and 5 are common to other distribution.
 As we are looking for a way to improve new distribution deployment, this process might be declined for other use case.
