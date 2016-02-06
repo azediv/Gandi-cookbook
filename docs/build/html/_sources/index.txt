@@ -16,10 +16,12 @@ Contents:
    mail/index
 
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+* Developer resources
+* Installation guides
+* Official support channels
+	 * Support ticket
+	 * Chat
+* Community support
+   * Q&A (coming soon)
+   * IRC (Freenode)
+ 	 * GitHub issues?

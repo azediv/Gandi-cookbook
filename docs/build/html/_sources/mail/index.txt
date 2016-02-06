@@ -1,7 +1,5 @@
-IaaS
+Mail
 ====
-
-Contents:
 
 .. toctree::
    :maxdepth: 2
@@ -9,10 +7,3 @@ Contents:
    gmail
    iphone
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

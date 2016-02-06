@@ -1,5 +1,5 @@
-Setting up your iPhone for Gandi Mail
-=====================================
+Gandi Mail on iPhone
+====================
 
 Setting up your iPhone for Gandi mail just takes a minute. Here's what to do:
 

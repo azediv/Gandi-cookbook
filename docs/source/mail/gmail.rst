@@ -1,5 +1,5 @@
-GandiMail and Gmail
-=======================================
+Gandi Mail and Gmail
+====================
 
 ## Configuring Gandi Mail for Gmail
 

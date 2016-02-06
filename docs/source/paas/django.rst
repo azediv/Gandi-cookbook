@@ -1,5 +1,5 @@
-Venv For Django CMS
-==========================================
+virtualenv for Django CMS
+=========================
 
 If you haven't already, create a virtual environment:
 

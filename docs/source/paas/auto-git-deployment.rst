@@ -1,5 +1,5 @@
-Auto Deploy From GitHub Simple Hosting
-=======================================
+auto deploy from GitHub to Simple Hosting
+=========================================
 
 This tutorial will be useful if you:
 
