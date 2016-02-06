@@ -1,4 +1,4 @@
-Python Virtual Environment For Django CMS
+Venv For Django CMS
 ==========================================
 
 If you haven't already, create a virtual environment:

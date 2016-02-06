@@ -1,5 +1,5 @@
-Automated Deployment From GitHub on Gandi Simple Hosting
-========================================================
+Auto Deploy From GitHub Simple Hosting
+=======================================
 
 This tutorial will be useful if you:
 
