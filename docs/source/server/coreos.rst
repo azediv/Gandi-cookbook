@@ -1,4 +1,6 @@
-# CoreOS on Gandi IaaS vm
+CoreOS on Gandi IaaS vm
+========================
+
 Installation script for CoreOS on Gandi server with gandi.cli
 
 ## Original idea
@@ -13,16 +15,19 @@ https://gist.github.com/jmbarbier/ab06cf23735845a0167a
 ## Howto 
 
 ### Download on local computer and make it executable : 
+::
 
 	$ wget https://raw.githubusercontent.com/azediv/gnadi-coreos/master/install-core.sh && chmod +x install-core.sh
 
 ### Edit install-core.sh to change hostname, disk name, user :
 
 hostname and disk name must be short for now, 7 or 8 max.
+::
 
 	$ $EDITOR install-core.sh
 	
 ### Run :
+::
 
 	$ ./install-core.sh
 
@@ -68,34 +73,42 @@ $VM_USER define username for coreos vm.
 $DC define datacenter for vm and disk 
 
 Creation of Debian vm (512Mo at least, 256Mo isn't enough to install packages) :
+::
 
 	$  gandi vm create --datacenter $DC --memory 512 --cores 1 --ip-version 4 --login $VM_USER --hostname $HOSTNAME --image "Debian 8 64 bits (HVM)" --size 3G
 
 Creation of data disk (target of CoreOS install) and attachment to VM :
+::
 
 	$ gandi disk create --name core_sys --size 10G --datacenter $DC -vm $HOSTNAME
 
 SSH to Debian :
+::
 
 	$ gandi vm ssh $HOSTNAME
 
 Unmont data disk before installation :
+::
 
 	# umount /dev/sdc
 
 Installation of wget
+::
 
 	# apt-get update && apt-get install -y wget 
 
 Download of coreos install script :
+::
 
 	# wget https://raw.github.com/coreos/init/master/bin/coreos-install
 
 Define as executable :
+::
 
 	# chmod +x coreos-install
 
 Grab username, hashed password, sshkey of vm from /gandi/config json file : 
+::
 
 	VM_USER = cat /gandi/config| grep -Po '(?<="user": ")[^"]*' |head -1
 
@@ -104,6 +117,7 @@ Grab username, hashed password, sshkey of vm from /gandi/config json file :
 	SSH = cat /gandi/config | grep -Po '(?<="ssh_key": ")[^"]*'
 
 Grab network config of vm from /gandi/config json file : 
+::
 
 	HOSTNAME = cat /gandi/config| grep -Po '(?<="vm_hostname": ")[^"]*'
 
@@ -118,6 +132,7 @@ Creation of cloud-config.yml file for CoreOS installation.
 Contains static network, user, sshkey, units, etc...
 
 Help : https://coreos.com/os/docs/latest/cloud-config.html#users
+::
 
 
 	# nano cloud-config.yml
@@ -153,46 +168,57 @@ Help : https://coreos.com/os/docs/latest/cloud-config.html#users
 
 
 Starting CoreOS installation with cloud-config.yml
+::
 
 	# ./coreos-install -d /dev/sdc -C alpha -c cloud-config.yml
 
 When installation is successfull, logout of Debian :
+::
 
 	# exit
 
 Stop the Debian vm :
+::
 
 	$ gandi vm stop $HOSTNAME
 
 Detach of system disk of Debian :
+::
 
 	$ gandi disk detach sys_$HOSTNAME
 
 Detach of data disk, CoreOS :
+::
 
 	$ gandi disk detach core_sys
 
 Update kernel to raw of data disk of CoreOS :
+::
 
 	$ gandi disk update --kernel raw core_sys
 
 Attachment as system disk (-p 0) to vm :
+::
 
 	$ gandi disk attach -p 0 core_sys $HOSTNAME
 
 First start of CoreOS on Gandi vm ! :
+::
 
 	$ gandi vm start $HOSTNAME
 
 Remove previous SSH fingerprint for IP  :
+::
 
 	$ ssh-keygen -f "/home/$USER/.ssh/known_hosts" -R $IP
 
 Login to CoreOS :
+::
 
 	$ gandi vm ssh --login $VM_USER $HOSTNAME
 
 Ping us ! :
+::
 
 	CoreOS alpha (870.2.0)
 	$VM_USER@$HOSTNAME ~ $ ping gandi.net

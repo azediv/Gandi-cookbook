@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>CoreOS on Gandi IaaS vm &mdash; gnadi-cookbook 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="gnadi-cookbook 0.0.1 documentation" href="../index.html" />
+    <link rel="up" title="IaaS" href="index.html" />
+    <link rel="next" title="Howto Luks Debian and Gandi" href="debian-luks.html" />
+    <link rel="prev" title="IaaS" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="debian-luks.html" title="Howto Luks Debian and Gandi"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="IaaS"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">gnadi-cookbook 0.0.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">IaaS</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="coreos-on-gandi-iaas-vm">
+<h1>CoreOS on Gandi IaaS vm<a class="headerlink" href="#coreos-on-gandi-iaas-vm" title="Permalink to this headline">¶</a></h1>
+<p>Installation script for CoreOS on Gandi server with gandi.cli</p>
+<p>## Original idea
+&#8220;fork&#8221; from jmbarbier idea to create a cluster of coreos on Gandi vm :
+<a class="reference external" href="https://gist.github.com/jmbarbier/ab06cf23735845a0167a">https://gist.github.com/jmbarbier/ab06cf23735845a0167a</a></p>
+<dl class="docutils">
+<dt>## Requirements</dt>
+<dd><ul class="first last simple">
+<li>gandi.cli with credits on iaas account</li>
+<li>nano text editor (vi(m) fan, sed script to replace nano by vi(m))</li>
+</ul>
+</dd>
+</dl>
+<p>## Howto</p>
+<p>### Download on local computer and make it executable :</p>
+<div class="highlight-python"><div class="highlight"><pre>$ wget https://raw.githubusercontent.com/azediv/gnadi-coreos/master/install-core.sh &amp;&amp; chmod +x install-core.sh
+</pre></div>
+</div>
+<p>### Edit install-core.sh to change hostname, disk name, user :</p>
+<p>hostname and disk name must be short for now, 7 or 8 max.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ $EDITOR install-core.sh
+</pre></div>
+</div>
+<p>### Run :</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ./install-core.sh
+</pre></div>
+</div>
+<p>## Automatic script</p>
+<p>install-core.sh is used locally with gandi.cli to create vm and install coreos with /gandi/config json file</p>
+<p>json config is download and used to create cloud-config.yml</p>
+<p>cloud-config.yml is scp to temp vm before install</p>
+<p>details in script, need to edit : VM_USER VM and DC</p>
+<p>TODO : gandi/config file provisionned in swap during first boot and use in cloud-config</p>
+<p>## Step by step process</p>
+<p>### Resume</p>
+<p>Creation of a Debian vm with a 10GB data disk.</p>
+<p>Retrieve config of vm from /gandi/config.</p>
+<p>Creation of cloud-config.yml file.</p>
+<p>Installation of CoreOS from Debian vm on data disk.</p>
+<p>Stop vm and detach of Debian disk.</p>
+<p>Define kernel as raw on CoreOS disk</p>
+<p>Attach CoreOS disk as system disk to vm.</p>
+<p>Boot and enjoy</p>
+<p>### Details:</p>
+<p>$HOSTNAME define hostname of coreos vm. ($VM in script)</p>
+<p>$VM_USER define username for coreos vm.</p>
+<p>$DC define datacenter for vm and disk</p>
+<p>Creation of Debian vm (512Mo at least, 256Mo isn&#8217;t enough to install packages) :</p>
+<div class="highlight-python"><div class="highlight"><pre>$  gandi vm create --datacenter $DC --memory 512 --cores 1 --ip-version 4 --login $VM_USER --hostname $HOSTNAME --image &quot;Debian 8 64 bits (HVM)&quot; --size 3G
+</pre></div>
+</div>
+<p>Creation of data disk (target of CoreOS install) and attachment to VM :</p>
+<div class="highlight-python"><div class="highlight"><pre>$ gandi disk create --name core_sys --size 10G --datacenter $DC -vm $HOSTNAME
+</pre></div>
+</div>
+<p>SSH to Debian :</p>
+<div class="highlight-python"><div class="highlight"><pre>$ gandi vm ssh $HOSTNAME
+</pre></div>
+</div>
+<p>Unmont data disk before installation :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># umount /dev/sdc</span>
+</pre></div>
+</div>
+<p>Installation of wget</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># apt-get update &amp;&amp; apt-get install -y wget</span>
+</pre></div>
+</div>
+<p>Download of coreos install script :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># wget https://raw.github.com/coreos/init/master/bin/coreos-install</span>
+</pre></div>
+</div>
+<p>Define as executable :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># chmod +x coreos-install</span>
+</pre></div>
+</div>
+<p>Grab username, hashed password, sshkey of vm from /gandi/config json file :</p>
+<div class="highlight-python"><div class="highlight"><pre>VM_USER = cat /gandi/config| grep -Po &#39;(?&lt;=&quot;user&quot;: &quot;)[^&quot;]*&#39; |head -1
+
+PASS : Hashed password can be used = cat /gandi/config | grep -Po &#39;(?&lt;=&quot;password&quot;: &quot;)[^&quot;]*&#39;
+
+SSH = cat /gandi/config | grep -Po &#39;(?&lt;=&quot;ssh_key&quot;: &quot;)[^&quot;]*&#39;
+</pre></div>
+</div>
+<p>Grab network config of vm from /gandi/config json file :</p>
+<div class="highlight-python"><div class="highlight"><pre>HOSTNAME = cat /gandi/config| grep -Po &#39;(?&lt;=&quot;vm_hostname&quot;: &quot;)[^&quot;]*&#39;
+
+IP = cat /gandi/config| grep -Po &#39;(?&lt;=&quot;pna_address&quot;: &quot;)[^&quot;]*&#39; |head -1
+
+ROUTE = cat /gandi/config | grep -Po &#39;(?&lt;=&quot;pbn_gateway&quot;: &quot;)[^&quot;]*&#39; | head -1
+
+DNS = gandi vm ssh $VM &#39;cat /etc/resolv.conf&#39; | awk &#39;{ print $2}&#39; | grep -E -o &quot;([0-9]{1,3}[\.]){3}[0-9]{1,3}&quot; | head -1
+</pre></div>
+</div>
+<p>Creation of cloud-config.yml file for CoreOS installation.</p>
+<p>Contains static network, user, sshkey, units, etc...</p>
+<p>Help : <a class="reference external" href="https://coreos.com/os/docs/latest/cloud-config.html#users">https://coreos.com/os/docs/latest/cloud-config.html#users</a></p>
+<div class="highlight-python"><div class="highlight"><pre># nano cloud-config.yml
+
+
+#cloud-config
+coreos:
+  units:
+    - name: systemd-networkd.service
+      command: stop
+    - name: 00-eth0.network
+      runtime: true
+      content: |
+        [Match]
+        Name=eth0
+
+        [Network]
+        DNS=$DNS
+        Address=$IP
+        Gateway=$ROUTE
+    - name: systemd-networkd.service
+      command: start
+hostname: $HOSTNAME
+users:
+  - name: $VM_USER
+    passwd: $PASS
+    groups:
+      - sudo
+      - docker
+
+    ssh_authorized_keys:
+      - $SSH
+</pre></div>
+</div>
+<p>Starting CoreOS installation with cloud-config.yml</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># ./coreos-install -d /dev/sdc -C alpha -c cloud-config.yml</span>
+</pre></div>
+</div>
+<p>When installation is successfull, logout of Debian :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># exit</span>
+</pre></div>
+</div>
+<p>Stop the Debian vm :</p>
+<div class="highlight-python"><div class="highlight"><pre>$ gandi vm stop $HOSTNAME
+</pre></div>
+</div>
+<p>Detach of system disk of Debian :</p>
+<div class="highlight-python"><div class="highlight"><pre>$ gandi disk detach sys_$HOSTNAME
+</pre></div>
+</div>
+<p>Detach of data disk, CoreOS :</p>
+<div class="highlight-python"><div class="highlight"><pre>$ gandi disk detach core_sys
+</pre></div>
+</div>
+<p>Update kernel to raw of data disk of CoreOS :</p>
+<div class="highlight-python"><div class="highlight"><pre>$ gandi disk update --kernel raw core_sys
+</pre></div>
+</div>
+<p>Attachment as system disk (-p 0) to vm :</p>
+<div class="highlight-python"><div class="highlight"><pre>$ gandi disk attach -p 0 core_sys $HOSTNAME
+</pre></div>
+</div>
+<p>First start of CoreOS on Gandi vm ! :</p>
+<div class="highlight-python"><div class="highlight"><pre>$ gandi vm start $HOSTNAME
+</pre></div>
+</div>
+<p>Remove previous SSH fingerprint for IP  :</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ssh-keygen -f &quot;/home/$USER/.ssh/known_hosts&quot; -R $IP
+</pre></div>
+</div>
+<p>Login to CoreOS :</p>
+<div class="highlight-python"><div class="highlight"><pre>$ gandi vm ssh --login $VM_USER $HOSTNAME
+</pre></div>
+</div>
+<p>Ping us ! :</p>
+<div class="highlight-python"><div class="highlight"><pre>CoreOS alpha (870.2.0)
+$VM_USER@$HOSTNAME ~ $ ping gandi.net
+PING gandi.net (217.70.184.1) 56(84) bytes of data.
+64 bytes from website.vip.gandi.net (217.70.184.1): icmp_seq=1 ttl=60 time=104 ms
+64 bytes from website.vip.gandi.net (217.70.184.1): icmp_seq=2 ttl=60 time=104 ms
+^C
+--- gandi.net ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1000ms
+rtt min/avg/max/mdev = 104.245/104.318/104.392/0.331 ms
+$VM_USER@$HOSTNAME ~ $
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">IaaS</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="debian-luks.html"
+                        title="next chapter">Howto Luks Debian and Gandi</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/server/coreos.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, azediv.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
+      |
+      <a href="../_sources/server/coreos.txt"
+          rel="nofollow">Page source</a></li>
+    </div>
+
+    
+
+    
+  </body>
+</html>

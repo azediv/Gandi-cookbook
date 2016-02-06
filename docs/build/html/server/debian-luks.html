@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Howto Luks Debian and Gandi &mdash; gnadi-cookbook 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="gnadi-cookbook 0.0.1 documentation" href="../index.html" />
+    <link rel="up" title="IaaS" href="index.html" />
+    <link rel="prev" title="IaaS" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="index.html" title="IaaS"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">gnadi-cookbook 0.0.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">IaaS</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="howto-luks-debian-and-gandi">
+<h1>Howto Luks Debian and Gandi<a class="headerlink" href="#howto-luks-debian-and-gandi" title="Permalink to this headline">¶</a></h1>
+<p>This Howto describe a process to create a raw vm of Debian with an encrypted root partition on Gandi servers.
+Step 1, 2 and 5 are common to other distribution.
+As we are looking for a way to improve new distribution deployment, this process might be declined for other use case.</p>
+<ol class="arabic simple">
+<li>creation of a vm with all tools to start minimal installation of &#8220;any&#8221; distribution on Gandi IaaS VPS/servers</li>
+<li>creation of target disk that will be use as target disk and is needed for &#8220;any&#8221; distribution.</li>
+<li>specific to Debian installation with LVM encrypted in kvm vm with raw format</li>
+<li>specific to encrypted volume and Grub bootloader configuration</li>
+<li>configure Gandi VPS with new disk and is for &#8220;any&#8221; distribution</li>
+</ol>
+<p>## 1 : Gandi vm creation, tools install and raw vm creation.</p>
+<p>We will proceed to a Debian vm creation and tools required to create a qemu/kvm raw vm inside of this Gandi vm. (sexy isn&#8217;t it ?)
+Then we will download desired boot medium for an install. A netinstall iso of latest debian version in this example.</p>
+<p>### 1.1 : Creation of temp vm :</p>
+<div class="highlight-python"><div class="highlight"><pre>local $ gandi vm create --hostname vdl --datacenter LU --ip-version 4 --login user --password --memory 8192 --cores 4 --image &#39;Debian 8 64 bits (HVM)&#39; --size 10G
+local $ gandi vm ssh vdl
+</pre></div>
+</div>
+<p>### 1.2 : Installation of requirements on temp vm :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># apt-get update &amp;&amp; apt-get upgrade -y &amp;&amp; apt-get install kvm qemu-kvm libvirt-bin virtinst bridge-utils virt-manager wget cryptsetup -y</span>
+</pre></div>
+</div>
+<p>### 1.3 : Creation of working directory</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># mkdir /home/vm</span>
+<span class="n">vm</span> <span class="c"># cd /home/vm</span>
+</pre></div>
+</div>
+<p>### 1.4 : Download of debian netinstall iso</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># wget http://cdimage.debian.org/debian-cd/8.2.0/amd64/iso-cd/debian-8.2.0-amd64-netinst.iso</span>
+</pre></div>
+</div>
+<p>### 1.5 : Creation of raw image for installation of raw vm</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># qemu-img create -f raw deb.raw 3G</span>
+</pre></div>
+</div>
+<p>### 1.6 : Configuration of network on temp vm for raw vm</p>
+<p>Edit gandi config file :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># nano/vi(m) /etc/default/gandi</span>
+</pre></div>
+</div>
+<p>and change :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;CONFIG_NETWORK=1&quot;</span>
+</pre></div>
+</div>
+<p>into :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;CONFIG_NETWORK=0&quot;</span>
+</pre></div>
+</div>
+<p>then configure bridge network :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># virsh iface-bridge eth0 br0</span>
+</pre></div>
+</div>
+<p>Here you&#8217;ll be disconnected so :</p>
+<div class="highlight-python"><div class="highlight"><pre>local $ gandi vm reboot vdl
+local $ gandi vm ssh vdl
+</pre></div>
+</div>
+<p>### 1.7 : Creation of raw vm with iso as boot disk</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># cd /home/vm</span>
+<span class="n">vm</span> <span class="c"># virt-install --connect qemu:///system -n vm -r 2048 --vcpus=1 --disk  path=/home/vm/deb.raw -c /home/vm/debian-8.2.0-amd64-netinst.iso --vnc  --noautoconsole --os-type linux --network=bridge:br0 --hvm</span>
+</pre></div>
+</div>
+<p>### 1.8 : Connexion to raw vm, 2 solutions :</p>
+<p>#### 1.8.1 : Install virt-manager on local computer</p>
+<div class="highlight-python"><div class="highlight"><pre>local $ sudo apt-get install virt-manager
+local $ virt-manager
+</pre></div>
+</div>
+<p>Choose in Menu : File =&gt; Add a connexion</p>
+<p>Hypervisor : QEMU/KVM
+tick &#8220;Connexion to a remote host&#8221;
+Method :  SSH
+Username : root
+Hostname : IP of temp VM
+Select Automatic connexion and click &#8220;Connect&#8221;</p>
+<p>In virt-manager, right-click on new connexion and click &#8220;Connect&#8221;
+You will then be able to select raw vm and click &#8220;Open&#8221; in menu.</p>
+<p>#### 1.8.2 : Creation of a tunnel to initiate vnc connection from local computer</p>
+<div class="highlight-python"><div class="highlight"><pre>local $ ssh user@VDL_IP -L 5900:127.0.0.1:5900
+local $ vncviewer 127.0.0.1
+</pre></div>
+</div>
+<p>select &#8220;Install&#8221; in viewer and you&#8217;ll be disconnected so connect again</p>
+<div class="highlight-python"><div class="highlight"><pre>local $ vncviewer 127.0.0.1
+</pre></div>
+</div>
+<p>### 1.9 : Manual config of network during installation with vm public network settings</p>
+<p>from temp vm :</p>
+<div class="highlight-python"><div class="highlight"><pre>IP : cat /gandi/config| grep -Po &#39;(?&lt;=&quot;pna_address&quot;: &quot;)[^&quot;]*&#39; |head -1
+GATEWAY : cat /gandi/config | grep -Po &#39;(?&lt;=&quot;pbn_gateway&quot;: &quot;)[^&quot;]*&#39; | head -1
+DNS : cat /etc/resolv.conf | awk &#39;{ print $2}&#39; | grep -E -o &quot;([0-9]{1,3}[\.]){3}[0-9]{1,3}&quot; | head -1
+HOSTNAME : cat /gandi/config| grep -Po &#39;(?&lt;=&quot;vm_hostname&quot;: &quot;)[^&quot;]*&#39;
+</pre></div>
+</div>
+<p>## 2 : Target disk creation</p>
+<p>This section is for any distribution</p>
+<p>### Creation of target disk</p>
+<div class="highlight-python"><div class="highlight"><pre>local : $ gandi disk create --size 4G --name vdluks --vm vdl
+vm : # umount /dev/sdc
+</pre></div>
+</div>
+<p>## 3 : Debian install with LVM encrypted</p>
+<p>This section is specific to Debian install and should be adapted for another distribution</p>
+<p>### 3.1 : Partitionning</p>
+<p>select assisted all in one disk with encrypted LVM</p>
+<p>all in one partition (recommend for beginner)</p>
+<p>### 3.2 : Networking</p>
+<blockquote>
+<div>important note</div></blockquote>
+<p>after apt mirror selection, when it fail to find network mirrors :
+choose &#8220;Go Back&#8221; and continue without network mirrors with &#8220;Yes&#8221;</p>
+<blockquote>
+<div>irl : grab a coffee</div></blockquote>
+<p>### 3.3 : Bootloader</p>
+<p>at the end of installation, choose to install Grub &#8220;Yes&#8221; and on /dev/sda</p>
+<p>When install is over, kvm vm will stop due to default settings &#8220;no autostart&#8221;</p>
+<p>## 4 : Configuraiton of Grub bootloader</p>
+<p>Copy to disk and mount with cryptsetup to reinstall Grub</p>
+<p>### 4.1 : Copy image to disk and mount partitions to chroot :</p>
+<p>Copy of raw image with dd to target disk :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># dd if=deb.raw of=/dev/sdc</span>
+</pre></div>
+</div>
+<p>Open with cryptsetup root partition and name it vm :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># cryptsetup luksOpen /dev/sdc5 vm</span>
+</pre></div>
+</div>
+<p>Create mount directory :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># mkdir /srv/vm</span>
+</pre></div>
+</div>
+<p>Scan all pĥysical volume :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># vgscan</span>
+<span class="n">vm</span> <span class="c"># vgchange -ay</span>
+</pre></div>
+</div>
+<p>Scan all logical volume :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># lvscan</span>
+</pre></div>
+</div>
+<p>Note logical volume path to mount it.</p>
+<p>Mount {root,boot,dev,proc,sys} partitions :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># mount /dev/deb-vdl/root /srv/vm</span>
+<span class="n">vm</span> <span class="c"># mount /dev/sdc1 /srv/vm/boot/</span>
+<span class="n">vm</span> <span class="c"># mount -o bind /dev/ /srv/vm/dev/</span>
+<span class="n">vm</span> <span class="c"># mount -o bind /proc/ /srv/vm/proc/</span>
+<span class="n">vm</span> <span class="c"># mount -o bind /sys /srv/vm/sys/</span>
+</pre></div>
+</div>
+<p>Chroot inside new debian vm :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># chroot /srv/vm</span>
+</pre></div>
+</div>
+<p>### 4.2 : Edit grub :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">chroot</span> <span class="c"># vi(m)/nano /etc/default/grub</span>
+</pre></div>
+</div>
+<p>and change :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># GRUB_CMDLINE_LINUX=&quot;&quot;</span>
+</pre></div>
+</div>
+<p>to :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># GRUB_CMDLINE_LINUX=&quot;console=ttyS0&quot;</span>
+</pre></div>
+</div>
+<p>### 4. 3 : Reinstall Grub :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">chroot</span> <span class="c"># grub-install /dev/sdc</span>
+<span class="n">chroot</span> <span class="c"># update-grub</span>
+<span class="n">chroot</span> <span class="c"># exit</span>
+
+<span class="n">vm</span> <span class="c"># exit</span>
+</pre></div>
+</div>
+<p>## 5 : The end</p>
+<p>### 5.1 : Detach, update, attach and start vm :</p>
+<div class="highlight-python"><div class="highlight"><pre>local $ gandi vm stop vdl
+local $ gandi disk detach sys_vdl -f
+local $ gandi disk detach vdluks -f
+local $ gandi disk update vdluks --kernel raw
+local $ gandi disk attach vdluks -p 0 vdl -f
+local $ gandi vm start vdl
+</pre></div>
+</div>
+<p>### 5.2 : Decrypt Partition with console :</p>
+<div class="highlight-python"><div class="highlight"><pre>local $ gandi vm console vdl
+
+Asking for console, please wait
+Connected
+
+Grabbing terminal
+Ok
+...
+Please unlock disk sda5_crypt:
+</pre></div>
+</div>
+<p>Unlock !!!</p>
+<p>Login as root for next step.</p>
+<p>vm has network, please ping us !</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">raw_vm</span> <span class="c"># ping gandi.net</span>
+</pre></div>
+</div>
+<p>## Optimization :</p>
+<p>### Edit sources :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">raw_vm</span> <span class="c"># # vi(m)/nano /etc/apt/sources.list</span>
+</pre></div>
+</div>
+<p>And add</p>
+<div class="highlight-python"><div class="highlight"><pre>deb ftp://ftp.fr.debian.org/debian/ jessie main contrib non-free
+deb ftp://ftp.fr.debian.org/debian/ jessie-updates main contrib non-free
+</pre></div>
+</div>
+<p>### Update</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">raw_vm</span> <span class="c"># apt-get update</span>
+</pre></div>
+</div>
+<p>### Install gandi-hosting-vm2 :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">raw_vm</span> <span class="c"># wget http://mirrors.gandi.net/gandi/debian/pool/gandi-hosting-vm2_2.6_all.deb</span>
+<span class="n">raw_vm</span> <span class="c"># dpkg -i gandi-hosting-vm2_2.6_all.deb</span>
+<span class="n">raw_vm</span> <span class="c"># apt-get install -f</span>
+</pre></div>
+</div>
+<p>### Install OpenSSH server :</p>
+<div class="highlight-python"><div class="highlight"><pre>raw_vm # apt-get install openssh-server
+local $ ssh-keygen -f &quot;/home/$USER/.ssh/known_hosts&quot; -R VM_IP
+local $ gandi vm ssh --login user vdl
+</pre></div>
+</div>
+<p>Ready !</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">IaaS</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/server/debian-luks.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, azediv.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
+      |
+      <a href="../_sources/server/debian-luks.txt"
+          rel="nofollow">Page source</a></li>
+    </div>
+
+    
+
+    
+  </body>
+</html>
