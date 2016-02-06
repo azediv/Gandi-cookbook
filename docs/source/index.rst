@@ -8,18 +8,18 @@ Welcome to gnadi-cookbook's documentation!
 
 * Installation guides
 
-.. toctree::
-   :maxdepth: 2
+  .. toctree::
+     :maxdepth: 2
 
-   iaas/index
-   paas/index
-   mail/index
+     iaas/index
+     paas/index
+     mail/index
 
 
 * Official support channels
 
-.. toctree::
-   :maxdepth: 1
+  .. toctree::
+     :maxdepth: 1
 
-   support
+     support
 
