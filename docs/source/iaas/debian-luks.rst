@@ -16,25 +16,21 @@ As we are looking for a way to improve new distribution deployment, this process
 We will proceed to a Debian vm creation and tools required to create a qemu/kvm raw vm inside of this Gandi vm. (sexy isn't it ?)
 Then we will download desired boot medium for an install. A netinstall iso of latest debian version in this example.
 
-### 1.1 : Creation of temp vm :
-::
+### 1.1 : Creation of temp vm::
 
 	local $ gandi vm create --hostname vdl --datacenter LU --ip-version 4 --login user --password --memory 8192 --cores 4 --image 'Debian 8 64 bits (HVM)' --size 10G
 	local $ gandi vm ssh vdl
 
-### 1.2 : Installation of requirements on temp vm :
-::
+### 1.2 : Installation of requirements on temp vm::
 
-	vm # apt-get update && apt-get upgrade -y && apt-get install kvm qemu-kvm libvirt-bin virtinst bridge-utils virt-manager wget cryptsetup -y
+		vm # apt-get update && apt-get upgrade -y && apt-get install kvm qemu-kvm libvirt-bin virtinst bridge-utils virt-manager wget cryptsetup -y
 
-### 1.3 : Creation of working directory
-::
+### 1.3 : Creation of working directory::
 
 	vm # mkdir /home/vm
 	vm # cd /home/vm
 
-### 1.4 : Download of debian netinstall iso
-::
+### 1.4 : Download of debian netinstall iso::
 
 	vm # wget http://cdimage.debian.org/debian-cd/8.2.0/amd64/iso-cd/debian-8.2.0-amd64-netinst.iso
 

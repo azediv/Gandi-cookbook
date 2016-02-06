@@ -32,7 +32,7 @@
   
     <link rel="top" title="gnadi-cookbook 0.0.1 documentation" href="../index.html"/>
         <link rel="up" title="IaaS" href="index.html"/>
-        <link rel="next" title="IaaS" href="../paas/index.html"/>
+        <link rel="next" title="PaaS" href="../paas/index.html"/>
         <link rel="prev" title="CoreOS on Gandi IaaS vm" href="coreos.html"/> 
 
   
@@ -78,19 +78,16 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="">Howto Luks Debian and Gandi</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../paas/index.html">IaaS</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../paas/django.html">Python Virtual Environment For Django CMS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../paas/auto-git-deployment.html">Automated Deployment From GitHub on Gandi Simple Hosting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../paas/index.html">PaaS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../paas/django.html">virtualenv for Django CMS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../paas/auto-git-deployment.html">auto deploy from GitHub to Simple Hosting</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../paas/index.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../mail/index.html">IaaS</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../mail/gmail.html">Setting up a GandiMail mailbox in Gmail</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../mail/iphone.html">Setting up your iPhone for Gandi Mail</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mail/index.html">Mail</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../mail/gmail.html">Gandi Mail and Gmail</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mail/iphone.html">Gandi Mail on iPhone</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../mail/index.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 
           
@@ -145,21 +142,21 @@ As we are looking for a way to improve new distribution deployment, this process
 <p>## 1 : Gandi vm creation, tools install and raw vm creation.</p>
 <p>We will proceed to a Debian vm creation and tools required to create a qemu/kvm raw vm inside of this Gandi vm. (sexy isn&#8217;t it ?)
 Then we will download desired boot medium for an install. A netinstall iso of latest debian version in this example.</p>
-<p>### 1.1 : Creation of temp vm :</p>
+<p>### 1.1 : Creation of temp vm:</p>
 <div class="highlight-python"><div class="highlight"><pre>local $ gandi vm create --hostname vdl --datacenter LU --ip-version 4 --login user --password --memory 8192 --cores 4 --image &#39;Debian 8 64 bits (HVM)&#39; --size 10G
 local $ gandi vm ssh vdl
 </pre></div>
 </div>
-<p>### 1.2 : Installation of requirements on temp vm :</p>
+<p>### 1.2 : Installation of requirements on temp vm:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># apt-get update &amp;&amp; apt-get upgrade -y &amp;&amp; apt-get install kvm qemu-kvm libvirt-bin virtinst bridge-utils virt-manager wget cryptsetup -y</span>
 </pre></div>
 </div>
-<p>### 1.3 : Creation of working directory</p>
+<p>### 1.3 : Creation of working directory:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># mkdir /home/vm</span>
 <span class="n">vm</span> <span class="c"># cd /home/vm</span>
 </pre></div>
 </div>
-<p>### 1.4 : Download of debian netinstall iso</p>
+<p>### 1.4 : Download of debian netinstall iso:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">vm</span> <span class="c"># wget http://cdimage.debian.org/debian-cd/8.2.0/amd64/iso-cd/debian-8.2.0-amd64-netinst.iso</span>
 </pre></div>
 </div>
@@ -368,7 +365,7 @@ local $ gandi vm ssh --login user vdl
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../paas/index.html" class="btn btn-neutral float-right" title="IaaS" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../paas/index.html" class="btn btn-neutral float-right" title="PaaS" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="coreos.html" class="btn btn-neutral" title="CoreOS on Gandi IaaS vm" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
