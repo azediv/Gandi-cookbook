@@ -1,0 +1,221 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Setting up your iPhone for Gandi Mail &mdash; gnadi-cookbook 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="gnadi-cookbook 0.0.1 documentation" href="../index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../index.html" class="icon icon-home"> gnadi-cookbook
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../server/index.html">IaaS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../server/coreos.html">CoreOS on Gandi IaaS vm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../server/debian-luks.html">Howto Luks Debian and Gandi</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../server/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">gnadi-cookbook</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Setting up your iPhone for Gandi Mail</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/mail/iphone.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="setting-up-your-iphone-for-gandi-mail">
+<h1>Setting up your iPhone for Gandi Mail<a class="headerlink" href="#setting-up-your-iphone-for-gandi-mail" title="Permalink to this headline">¶</a></h1>
+<p>Setting up your iPhone for Gandi mail just takes a minute. Here&#8217;s what to do:</p>
+<ol class="arabic">
+<li><p class="first">Go to <strong>Settings</strong>, then</p>
+</li>
+<li><p class="first"><strong>Mail, Contacts, Calendars</strong>, then</p>
+</li>
+<li><p class="first">Click <strong>Add Account...</strong></p>
+</li>
+<li><p class="first">Choose <strong>Other</strong></p>
+</li>
+<li><p class="first">Select <strong>Add Mail Account</strong>&#8221; under <strong>Mail</strong></p>
+<p>Here, you will just enter the information as requested. I am providing some example values below, you will need to replace them with your own:</p>
+</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Name: <strong>`Jon Doe`</strong></li>
+<li>Address: <strong>`jon&#64;example.com`</strong></li>
+<li>Password: <strong>`yourpasswd`</strong></li>
+<li>Description: will be filled in automatically, but can be anything</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li>Click &#8220;<strong>Next</strong>&#8220;</li>
+<li>Choose IMAP or POP.</li>
+</ol>
+<p>## Instructions for POP and IMAP
+### Incoming Mail Server</p>
+<ul class="simple">
+<li>Host Name: <cite>mail.gandi.net</cite></li>
+<li>User Name: <strong>`joe&#64;example.com`</strong></li>
+<li>Password: <strong>`yourpasswd`</strong></li>
+</ul>
+<p>### Outgoing Mail Server</p>
+<ul class="simple">
+<li>Host Name: <cite>mail.gandi.net</cite></li>
+<li>Username: <strong>`joe&#64;example.com`</strong></li>
+<li>Password: <strong>`yourpasswd`</strong></li>
+</ul>
+<p>Click &#8220;<strong>Save</strong>&#8221;.</p>
+<p>It will now check the configuration and will display the message &#8220;Verifying&#8221; at the top. This process can take about 30 seconds. When complete, it will bring you back to the screen that shows your email accounts.</p>
+<p>## Troubleshooting</p>
+<p>Not all providers will let you send emails from a third-party SMTP server. If you encounter problems sending mail (eg. a message saying that the SMTP server mail.gandi.net is not responding), just use the SMTP server of your local internet provider.</p>
+<p>You can verify the standard settings (port, etc.) at <a class="reference external" href="http://wiki.gandi.net/en/mail/standard-settings">http://wiki.gandi.net/en/mail/standard-settings</a></p>
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, azediv.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

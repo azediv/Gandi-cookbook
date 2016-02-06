@@ -124,6 +124,7 @@ This section is for any distribution
 
 ### Creation of target disk
 ::
+
 	local : $ gandi disk create --size 4G --name vdluks --vm vdl
 	vm : # umount /dev/sdc
 

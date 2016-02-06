@@ -11,8 +11,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   server/index
-
+   iaas/index
+   paas/index
+   mail/index
 
 
 Indices and tables

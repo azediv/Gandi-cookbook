@@ -1,0 +1,239 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Automated Deployment From GitHub on Gandi Simple Hosting &mdash; gnadi-cookbook 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="gnadi-cookbook 0.0.1 documentation" href="../index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../index.html" class="icon icon-home"> gnadi-cookbook
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../server/index.html">IaaS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../server/coreos.html">CoreOS on Gandi IaaS vm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../server/debian-luks.html">Howto Luks Debian and Gandi</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../server/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">gnadi-cookbook</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Automated Deployment From GitHub on Gandi Simple Hosting</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/paas/auto-git-deployment.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="automated-deployment-from-github-on-gandi-simple-hosting">
+<h1>Automated Deployment From GitHub on Gandi Simple Hosting<a class="headerlink" href="#automated-deployment-from-github-on-gandi-simple-hosting" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial will be useful if you:</p>
+<ul class="simple">
+<li>have a website with static content</li>
+<li>want to host the source code for your website on GitHub or BitBucket</li>
+<li>want the site to be hosted on a Gandi Simple Hosting instance, and</li>
+<li>you want your site to be updated automatically any time changed are pushed to the repo.</li>
+</ul>
+<p>## Requirements</p>
+<ul class="simple">
+<li>A Gandi Simple Hosting (PHP/MySQL) (or create one below)</li>
+<li>A GitHub or BitBucket account</li>
+<li>A public git repo with static web content</li>
+</ul>
+<p>We&#8217;re using the [Gandi CLI](<a class="reference external" href="http://cli.gandi.net">http://cli.gandi.net</a>) for this tutorial, but you can also perform these steps within your Gandi account.</p>
+<p>## Warning</p>
+<p>Simple Hosting is not designed for use of git from within the instance. It only partially works and even the things we&#8217;re doing below are very fragile. Do not make any changes to files directly on your instance, or you will get stuck and have to start over.</p>
+<p>### Create a PHP/MySQL Simple Hosting Instance</p>
+<blockquote>
+<div>$ gandi paas create &#8211;name squirrels &#8211;type phpmysql &#8211;vhosts squirrels.gandi.xyz</div></blockquote>
+<p>### Connect to the instance via SSH</p>
+<p>The following command will activate the console and automatically open a connection to it.</p>
+<blockquote>
+<div>$ gandi paas console squirrels</div></blockquote>
+<p>### Clone the repo to the instance</p>
+<p>Clone the repo into the <cite>htdocs/</cite> directory:</p>
+<blockquote>
+<div>$ cd /srv/data/web/vhosts/squirrels.gandi.xyz/htdocs
+$ rm index.html                                               # Because the directory has to be empty first
+$ git clone <a class="reference external" href="https://github.com/soulshake/squirrels.git">https://github.com/soulshake/squirrels.git</a> .      # Note the dot at the end
+$ ls -la</div></blockquote>
+<p>In my case, the output of <cite>ls -la</cite> looks like this:</p>
+<blockquote>
+<div><a class="reference external" href="mailto:hosting-user&#37;&#52;&#48;squirrels">hosting-user<span>&#64;</span>squirrels</a>:~/web/vhosts/squirrels.gandi.xyz/htdocs$ ls -la
+total 9
+drwxrwxr-x 4 hosting-user hosting-user   7 Dec 14 22:52 .
+drwxrwxr-x 3 root         hosting-user   3 Dec 14 07:36 ..
+drwxr-xr-x 8 hosting-user hosting-user  15 Dec 14 22:52 .git
+-rw-r&#8211;r&#8211; 1 hosting-user hosting-user  79 Dec 14 22:48 README.md
+drwxr-xr-x 2 hosting-user hosting-user   3 Dec 14 22:48 images
+-rw-r&#8211;r&#8211; 1 hosting-user hosting-user 101 Dec 14 22:52 index.html
+-rwxr-xr-x 1 hosting-user hosting-user 318 Dec 14 22:49 pull.php</div></blockquote>
+<p>See <cite>pull.php</cite> above? It&#8217;s there in the sample repo we&#8217;re using for this tutorial, but you&#8217;ll need to make one.
+Create a PHP file (we&#8217;ll call ours <cite>pull.php</cite>) with the following contents:</p>
+<p><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">&lt;?php</span>
+<span class="pre">`git</span> <span class="pre">pull`;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">//</span> <span class="pre">This</span> <span class="pre">will</span> <span class="pre">execute</span> <span class="pre">the</span> <span class="pre">`git</span> <span class="pre">pull`</span> <span class="pre">command</span> <span class="pre">on</span> <span class="pre">your</span> <span class="pre">instance</span>
+<span class="pre">header(&quot;Cache-Control:</span> <span class="pre">max-age=1&quot;);</span> <span class="pre">//</span> <span class="pre">Lower</span> <span class="pre">the</span> <span class="pre">cache</span> <span class="pre">while</span> <span class="pre">we're</span> <span class="pre">here</span> <span class="pre">so</span> <span class="pre">the</span> <span class="pre">changes</span> <span class="pre">take</span> <span class="pre">effect</span> <span class="pre">faster</span>
+<span class="pre">echo</span> <span class="pre">&quot;hello!&quot;;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">//</span> <span class="pre">So</span> <span class="pre">you</span> <span class="pre">can</span> <span class="pre">confirm</span> <span class="pre">the</span> <span class="pre">file</span> <span class="pre">is</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">right</span> <span class="pre">place</span> <span class="pre">by</span> <span class="pre">browsing</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">URL</span>
+<span class="pre">?&gt;</span>
+<span class="pre">`</span></code></p>
+<p>Make sure the file is executable:</p>
+<blockquote>
+<div>$ chmod +x pull.php</div></blockquote>
+<p>Check that everything is working correctly by browsing to the URL corresponding to <cite>pull.php</cite>. In our case, it looks like this:</p>
+<blockquote>
+<div><a class="reference external" href="http://squirrels.gandi.xyz/pull.php">http://squirrels.gandi.xyz/pull.php</a></div></blockquote>
+<p>![screenshot](<a class="reference external" href="http://ss.squirrel.li/image/3N0v3n1I2S1o">http://ss.squirrel.li/image/3N0v3n1I2S1o</a> &#8220;pull.php&#8221;)</p>
+<p>Next, go to the settings page of your GitHub repo, then choose &#8220;Webhooks &amp; Services&#8221; from the menu on the left.</p>
+<p>Click &#8220;Add webhook&#8221; and paste the path to your .php file in the &#8220;Payload URL&#8221; field:</p>
+<p>![screenshot](<a class="reference external" href="http://ss.squirrel.li/image/1U1G3l133O3O">http://ss.squirrel.li/image/1U1G3l133O3O</a>)</p>
+<p>It may take a few minutes to start working due to the Varnish cache. Thereafter, note that changes will still take about a minute to be visible unless you purge the cache manually.</p>
+<p>Now, every time your repo is updated, your website will be, too!</p>
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, azediv.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Setting up a GandiMail mailbox in Gmail &mdash; gnadi-cookbook 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="gnadi-cookbook 0.0.1 documentation" href="../index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../index.html" class="icon icon-home"> gnadi-cookbook
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../server/index.html">IaaS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../server/coreos.html">CoreOS on Gandi IaaS vm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../server/debian-luks.html">Howto Luks Debian and Gandi</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../server/index.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">gnadi-cookbook</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Setting up a GandiMail mailbox in Gmail</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/mail/gmail.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="setting-up-a-gandimail-mailbox-in-gmail">
+<h1>Setting up a GandiMail mailbox in Gmail<a class="headerlink" href="#setting-up-a-gandimail-mailbox-in-gmail" title="Permalink to this headline">¶</a></h1>
+<p>## Configuring Gandi Mail for Gmail</p>
+<p>This page contains instructions for setting up Gmail (aka Mail Fetcher) to send and receive from your Gandi mailboxes.</p>
+<p><em>Note: This will allow you to import your GandiMail to your current &#8216;&#8217;&#64;gmail.com&#8217;&#8217; inbox – not to be confused with [Google Apps a.k.a. Gmail for your domain](http://wiki.gandi.net/en:domains:management:googleapps).</em></p>
+<p>### Step 1: Receiving (POP/IMAP)</p>
+<blockquote>
+<div><ul class="simple">
+<li>In your Gmail account, go to settings (click the gear icon to the upper right of your inbox, then click &#8220;settings&#8221;)</li>
+<li>Click the &#8220;Accounts&#8221; tab at the top.</li>
+<li>Under &#8220;Check mail from other accounts (using POP3)&#8221; click &#8220;Add a POP3 mail account you own&#8221;</li>
+<li><strong>Email address:</strong> Enter the email address you want to be able to check from Gmail, i.e. <cite>admin&#64;example.com</cite>, then click &#8220;next step&#8221;</li>
+<li><strong>Username:</strong> Enter your <strong>email address</strong> again, i.e. <cite>admin&#64;example.com</cite> (<cite>admin</cite> by itself won&#8217;t work).</li>
+<li><strong>Password:</strong> Enter the password you chose when you created the <cite>admin&#64;</cite> mailbox for <cite>example.com</cite>. (This must be a mailbox and not a forwarding address).</li>
+<li><strong>POP Server:</strong> Change it to <cite>mail.gandi.net</cite></li>
+<li><strong>Port:</strong> <cite>110</cite> for POP or <cite>995</cite> for POP SSL</li>
+</ul>
+</div></blockquote>
+<p>If successful, you&#8217;ll be given the opportunity on the following screen to be able to send mail from the same address.</p>
+<p>### Step 2: Sending (SMTP)</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Name:</strong> Enter the name you want to appear in the &#8220;From:&#8221; field of your emails</li>
+<li><strong>Email address:</strong> Enter the same email address as in Step 1. Make your other selections and click Next.</li>
+<li><strong>Send mail through your SMTP server?</strong> You can send through Gandi SMTP, if you want:
+- <strong>SMTP Server:</strong> <cite>mail.gandi.net</cite> (this will probably pre-populate incorrectly)
+- <strong>Port:</strong> <cite>25</cite>, <cite>465</cite> (with SSL) or <cite>587</cite> (try one or the other)
+- <strong>Username:</strong> Same email address as before, ie <cite>admin&#64;example.com</cite></li>
+</ul>
+</div></blockquote>
+<p>If successful, the following screen will request you either click the confirmation link in the email or enter a confirmation code to be able to send mail from the above address.</p>
+<p>## Possible errors</p>
+<p>### &#8220;Authentication failed&#8221;</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">Server</span> <span class="pre">denied</span> <span class="pre">POP3</span> <span class="pre">access</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">given</span> <span class="pre">username</span> <span class="pre">and</span> <span class="pre">password.</span>
+<span class="pre">Server</span> <span class="pre">returned</span> <span class="pre">error:</span> <span class="pre">&quot;Authentication</span> <span class="pre">failed.&quot;</span>
+<span class="pre">`</span></code></p>
+<ul class="simple">
+<li>You may have only entered your username, whereas you need to enter the whole email address.</li>
+<li>You may be entering the wrong password.</li>
+<li>You may be trying to add a forwarding address instead of a mailbox.</li>
+</ul>
+</div></blockquote>
+<p>### &#8220;You already have the maximum number of accounts allowed.&#8221;</p>
+<p>You can only set up 5 external POP accounts in Gmail. Consider using a [forwarding address](<a class="reference external" href="http://wiki.gandi.net/en:mail:email-mailboxes-and-forwarding-addresses#how-can-i-set-up-e-mail-forwarding">http://wiki.gandi.net/en:mail:email-mailboxes-and-forwarding-addresses#how-can-i-set-up-e-mail-forwarding</a>) instead.</p>
+<p>### &#8220;We were unable to locate the other domain.&#8221;</p>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">There</span> <span class="pre">was</span> <span class="pre">a</span> <span class="pre">problem</span> <span class="pre">connecting</span> <span class="pre">to</span> <span class="pre">mail.yourdomain.tld</span>
+<span class="pre">Server</span> <span class="pre">returned</span> <span class="pre">error:</span> <span class="pre">&quot;We</span> <span class="pre">were</span> <span class="pre">unable</span> <span class="pre">to</span> <span class="pre">locate</span> <span class="pre">the</span> <span class="pre">other</span> <span class="pre">domain.</span>
+<span class="pre">Please</span> <span class="pre">contact</span> <span class="pre">your</span> <span class="pre">other</span> <span class="pre">provider.&quot;</span>
+<span class="pre">`</span></code></div></blockquote>
+<p>Replace <cite>mail.yourdomain.tld</cite> with <cite>mail.gandi.net</cite>.</p>
+<p>### &#8220;SSL protocol error.&#8221;</p>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">There</span> <span class="pre">was</span> <span class="pre">a</span> <span class="pre">problem</span> <span class="pre">connecting</span> <span class="pre">to</span> <span class="pre">mail.gandi.net</span>
+<span class="pre">Server</span> <span class="pre">returned</span> <span class="pre">error:</span> <span class="pre">&quot;SSL</span> <span class="pre">protocol</span> <span class="pre">error.</span> <span class="pre">Please</span> <span class="pre">try</span> <span class="pre">disabling</span> <span class="pre">SSL,</span>
+<span class="pre">or</span> <span class="pre">contact</span> <span class="pre">your</span> <span class="pre">other</span> <span class="pre">provider</span> <span class="pre">to</span> <span class="pre">verify</span> <span class="pre">the</span> <span class="pre">correct</span> <span class="pre">port</span> <span class="pre">settings.&quot;</span>
+<span class="pre">`</span></code></div></blockquote>
+<p>You may have selected &#8220;Always use a secure connection (SSL) when retrieving mail&#8221; but did not select the correct port for using SSL.</p>
+<p>### &#8220;Unable to process the account info.&#8221;</p>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">Server</span> <span class="pre">denied</span> <span class="pre">POP3</span> <span class="pre">access</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">given</span> <span class="pre">username</span> <span class="pre">and</span> <span class="pre">password.</span>
+<span class="pre">Server</span> <span class="pre">returned</span> <span class="pre">error:</span> <span class="pre">&quot;Unable</span> <span class="pre">to</span> <span class="pre">process</span> <span class="pre">the</span> <span class="pre">account</span> <span class="pre">info.&quot;</span>
+<span class="pre">`</span></code></div></blockquote>
+<p>This error can occur when the wrong port is selected for a given configuration.</p>
+<p>### &#8220;There was a problem connecting to mail.gandi.net&#8221;</p>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">There</span> <span class="pre">was</span> <span class="pre">a</span> <span class="pre">problem</span> <span class="pre">connecting</span> <span class="pre">to</span> <span class="pre">mail.gandi.net</span>
+<span class="pre">Server</span> <span class="pre">returned</span> <span class="pre">error:</span> <span class="pre">&quot;Missing</span> <span class="pre">+OK</span> <span class="pre">response</span> <span class="pre">upon</span> <span class="pre">connecting</span> <span class="pre">to</span> <span class="pre">the</span>
+<span class="pre">server:</span> <span class="pre">*</span> <span class="pre">OK</span> <span class="pre">[CAPABILITY</span> <span class="pre">IMAP4rev1</span> <span class="pre">LITERAL+</span> <span class="pre">SASL-IR</span> <span class="pre">LOGIN-REFERRALS</span>
+<span class="pre">ID</span> <span class="pre">ENABLE</span> <span class="pre">AUTH=PLAIN]</span> <span class="pre">Dovecot</span> <span class="pre">ready.&quot;</span>
+<span class="pre">`</span></code></div></blockquote>
+<p>You may be trying to use an IMAP port. Gmail does not support IMAP import.</p>
+<dl class="docutils">
+<dt>## See also</dt>
+<dd><ul class="first last simple">
+<li>[Google/Gmail/Mail Fetcher support: Get mail from other accounts](<a class="reference external" href="http://support.google.com/mail/bin/answer.py?hl=en&amp;answer=21288">http://support.google.com/mail/bin/answer.py?hl=en&amp;answer=21288</a>)</li>
+</ul>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, azediv.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,4 +1,5 @@
-# Setting up a GandiMail mailbox in Gmail
+Setting up a GandiMail mailbox in Gmail
+=======================================
 
 ## Configuring Gandi Mail for Gmail
 
