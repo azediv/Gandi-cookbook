@@ -6,7 +6,7 @@
 Welcome to gnadi-cookbook's documentation!
 ==========================================
 
-* Installation guides:
+* Installation guides
 
 .. toctree::
    :maxdepth: 2
