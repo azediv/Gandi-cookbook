@@ -8,7 +8,7 @@ Gandi Cookbook
 
 Welcome to Gandi cookbook's documentation!
 
-Here's a list of community driven Howto's combined with Official documentation in a single place.
+Here's a list of community driven Howto's
 
 
 
