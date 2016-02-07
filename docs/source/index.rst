@@ -3,8 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to gnadi-cookbook's documentation!
+Gandi Cookbook
 ==========================================
+
+Welcome to Gandi cookbook's documentation!
+
+Here's a list of community driven Howto's combined with Official documentation in a single place.
+
+
 
 * Installation guides
 
@@ -14,6 +20,7 @@ Welcome to gnadi-cookbook's documentation!
      iaas/index
      paas/index
      mail/index
+
 
 
 * Official support channels

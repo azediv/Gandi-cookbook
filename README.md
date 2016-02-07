@@ -1,12 +1,6 @@
 The Gandi cookbook
-============
+==================
 
-- Developer resources
-- Installation guides
-- Official support channels
- - Support ticket
- - Chat
-- Community support
- - Q&A (coming soon)
- - IRC (Freenode)
- - GitHub issues?
+Read The Docs Gandi Cookbook
+
+`Gandi Unofficial Documentation <https://gnadi-cookbook.readthedocs.org/en/latest/>`_ 

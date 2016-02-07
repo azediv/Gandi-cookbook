@@ -81,3 +81,7 @@ Click "Add webhook" and paste the path to your .php file in the "Payload URL" fi
 It may take a few minutes to start working due to the Varnish cache. Thereafter, note that changes will still take about a minute to be visible unless you purge the cache manually.
 
 Now, every time your repo is updated, your website will be, too!
+
+Author : soulshake
+Github : https://github.com/soulshake
+Doc Type : Community

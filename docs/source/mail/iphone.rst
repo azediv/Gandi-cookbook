@@ -42,11 +42,6 @@ Not all providers will let you send emails from a third-party SMTP server. If yo
 
 You can verify the standard settings (port, etc.) at http://wiki.gandi.net/en/mail/standard-settings
 
-
-
-
-
-
-
-
-
+Author : soulshake
+Github : https://github.com/soulshake
+Doc Type : Community

@@ -75,3 +75,7 @@ References:
 
 1. http://docs.django-cms.org/en/support-3.0.x/introduction/install.html
 2. http://wiki.gandi.net/en/simple/instance/python
+
+Author : soulshake
+Github : https://github.com/soulshake
+Doc Type : Community

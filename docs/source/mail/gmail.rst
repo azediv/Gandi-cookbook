@@ -91,3 +91,7 @@ You may be trying to use an IMAP port. Gmail does not support IMAP import.
 
 ## See also
   * [Google/Gmail/Mail Fetcher support: Get mail from other accounts](http://support.google.com/mail/bin/answer.py?hl=en&answer=21288)
+
+Author : soulshake
+Github : https://github.com/soulshake
+Doc Type : Community
